@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title></title>
+	<meta charset="utf-8">
+	<style type="text/css">
+	body {
+		margin: 0;
+	}
+	
+	p {
+		display: inline-block;
+	}
+	/*+++++++++++++++++++++++++++++++++++++++++++++++
+	
+	*/
+	
+	#wrap {
+		margin: 0 auto;
+		width: 2048px;
+		background-color: #00f;
+		color: #ff0;
+		opacity: .5;
+	}
+	
+	#box {
+		margin: 0 auto;
+		width: 200px;
+		/*height: 900px; overflow: hidden;*/
+		background-color: #0f0;
+		color: #ff0;
+	}
+	</style>
+	<script type="text/javascript" src="jquery-2.2.4.min.js"></script>
+	<script type="text/javascript" src="jquery.ba-resize.min.js"></script>
+	<script type="text/javascript" src="jquery.ba-scrollbarwidth.js"></script>
+	<script type="text/javascript">
+	(function($) {
+		$.fn.extend({
+			backgroundScroll: function(options) {
+				//Plugin Name
+				var _pluginName = 'backgroundScroll';
+				var _version = '1.0.0';
+
+				//Defaults
+				var defaults = {
+					wrapBoxSelector: 'body',
+					//boxBoxSelector: '#wrap',
+					imagesPath: 'images/background.jpg'
+				}
+
+				//Can't find the target
+				if (this.length < 1) {
+					console.log('警告：找不到' + options.contentBoxSelector + '！');
+					return;
+				}
+				var options = $.extend({}, defaults, options);
+
+				var _wrap = $(options.wrapBoxSelector);
+				var _box = this; //	$(options.boxBoxSelector);
+
+				var _view_finder, __view_finderScroller;
+				if (defaults.wrapBoxSelector === options.wrapBoxSelector) {
+					_view_finder = window;
+					_view_finderScroller = document;
+				} else {
+					_view_finder = _view_finderScroller = _wrap;
+				}
+
+				var _loadImage = function(url, callback) {
+					var img = new Image();
+					img.onload =
+						function() {
+							img.onload = null;
+							callback(img);
+						}
+
+					img.src = url;
+				}
+
+				var _bgHeight;
+				_loadImage(options.imagesPath, function(img) {
+					//Writting code at here:
+					//第二个坑，尼玛，宽度就是对象属性，哇哇哇呜呜呜……
+					_bgHeight = img.height;
+					//第一个坑，尼玛，要url，哇哇哇呜呜呜……
+					_wrap.css('background-image', 'url("' + options.imagesPath + '")');
+					if (_view_finder !== _view_finderScroller) {
+						_wrap.css('background-attachment', 'fixed');
+					}
+					_wrap.css('background-repeat', 'no-repeat');
+
+					$(_wrap).on("load resize", scrollingEvent);
+					//_wrap.on("resize", scrollingEvent);
+					$(_view_finderScroller).on("scroll", scrollingEvent);
+
+					//ie有问题，触发后没有显示背景
+					scrollingEvent();
+
+				});
+
+				scrollingEvent = function(e) {
+					//复位背景图片高度
+					//_bgBoxs.css('width', $(_view_finder).width() > _wrap.width() ? $(window).width() : _wrap.width());
+					//_bgBoxs.css('height', _bgHeight);
+					var _boxHeight = _box.height();
+					var _scrollerLength = (_view_finder !== _view_finderScroller) ? 0 : $.scrollbarWidth();
+					//有时不等，有待研究
+					//_view_finderHeight = window.innerHeight;
+					var _view_finderHeight = $(_view_finder).height();
+					var scrollTop = $(_view_finderScroller).scrollTop();
+
+					if (_boxHeight > _bgHeight) {
+						//_bgBoxs.css('height', $('.bg>img').height());
+						//_bgBoxs.find('img').css('top', 0);
+
+							_wrap.css('background-position', '0px -' + (scrollTop) * (_bgHeight - _view_finderHeight + _scrollerLength) / (_boxHeight - _view_finderHeight + _scrollerLength) + 'px');
+
+					} else if (_boxHeight < _bgHeight) {
+						if (_boxHeight <= _view_finderHeight) {
+							//chrome _view_finderHeight 底部没有滚动条时，也把滚动条高度减掉了，晕
+							//_bgBoxs.css('height', _view_finderHeight + 17);
+							//OR
+							//_bgBoxs.css('height', '100%');
+
+							//继续坑自己吗？这里没必要的垃圾代码，哈哈哈……
+							_wrap.css('background-position', '0px 0px');
+
+						} else {
+							//_bgBoxs.css('height', _boxHeight);
+							//_bgBoxs.css('top', 0);
+							//_bgBoxs.find('img').css('float', 'none');
+							//_bgBoxs.find('img').css('position', 'absolute');
+							//_bgBoxs.find('img').css('top', scrollTop - scrollTop * (_bgHeight - _view_finderHeight) / (_boxHeight - _view_finderHeight));
+
+							_wrap.css('background-position', '0px -' + (scrollTop) * (_bgHeight - _view_finderHeight + _scrollerLength) / (_boxHeight - _view_finderHeight + _scrollerLength) + 'px');
+
+							console.log('_wrap:postion:' + _wrap.css('background-position'));
+							console.log(scrollTop);
+						}
+
+					} else {
+						//相等
+						//_bgBoxs.css('height', _boxHeight);
+					}
+				}
+
+				return this.each(function(index, element) {});
+			}
+		});
+
+	})(window.jQuery)
+	</script>
+</head>
+
+<body>
+	<script type="text/javascript">
+	$(function() {
+		$('#wrap').backgroundScroll({
+			//wrapBoxSelector: '#wrap',
+			//boxBoxSelector: '#wrap',
+		});
+	})
+	</script>
+	<div id="wrap">
+		<div id="box">
+			
+		<p>
+				今年3月初，绵竹市公安局网安大队在网络巡查中，发现一段名为“成都4P”的淫秽色情视频在网上火热传播。一时间 “成都4P”成为各大搜索引擎热门关键词。此时网安大队收到了腾讯公司转来的绵竹籍网友关于“成都4P”的举报线索。
+			</p>
+			<p>
+				今年3月初，绵竹市公安局网安大队在网络巡查中，发现一段名为“成都4P”的淫秽色情视频在网上火热传播。一时间 “成都4P”成为各大搜索引擎热门关键词。此时网安大队收到了腾讯公司转来的绵竹籍网友关于“成都4P”的举报线索。
+			</p>
+			<p>
+				今年3月初，绵竹市公安局网安大队在网络巡查中，发现一段名为“成都4P”的淫秽色情视频在网上火热传播。一时间 “成都4P”成为各大搜索引擎热门关键词。此时网安大队收到了腾讯公司转来的绵竹籍网友关于“成都4P”的举报线索。
+			</p>
+			<p>
+				今年3月初，绵竹市公安局网安大队在网络巡查中，发现一段名为“成都4P”的淫秽色情视频在网上火热传播。一时间 “成都4P”成为各大搜索引擎热门关键词。此时网安大队收到了腾讯公司转来的绵竹籍网友关于“成都4P”的举报线索。
+			</p>
+
+
+
+		</div>
+	</div>
+</body>
+
+</html>
