@@ -1,10 +1,108 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title>demo</title>
-</head>
-<body>
-<a>test</a>
 
+<head>
+	<title></title>
+	<meta charset="utf-8">
+	<style type="text/css">
+	body {
+		margin: 0;
+	}
+	img{
+		/*img bug*/
+		display:block;
+	}
+	/*+++++++++++++++++++++++++++++++++++++++++++++++
+	start
+	document.body
+	*/
+	
+	#wrap {
+		margin: 0 auto;
+		width: 1000px;
+		color: #ff0;
+	}
+	/*+++++++++++++++++++++++++++++++++++++++++++++++
+	end
+	*/
+	/*+++++++++++++++++++++++++++++++++++++++++++++++
+	start
+	div1
+	*/
+	
+	#wrap1,
+	#wrap2,
+	#wrap3 {
+		margin: 0 auto;
+		border: 6px solid #666;
+		width: 1000px;
+		height: 200px;
+		overflow: scroll;
+		background-color: #00f;
+		color: #ff0;
+	}
+	
+	#box1,
+	#box2,
+	#box3 {
+		margin: 0 auto;
+		width: 600px;
+		color: #ff0;
+	}
+	/*+++++++++++++++++++++++++++++++++++++++++++++++
+	end
+	*/
+	</style>
+	<script type="text/javascript" src="jquery-1.11.0.min.js"></script>
+	<script type="text/javascript" src="jquery.ba-resize.min.js"></script>
+	<script type="text/javascript" src="jquery.ba-scrollbarwidth.js"></script>
+	<script type="text/javascript" src="jquery.backgroundScroll.js"></script>
+</head>
+
+<body>
+	<script type="text/javascript">
+	$(function() {
+
+		$('#box1').backgroundScroll({
+			//defaults:
+			//wrapBoxSelector: '#wrap1',
+			//imagesPath: 'images/background.jpg'
+		});
+
+		$('#box2').backgroundScroll({
+			//defaults:
+			//wrapBoxSelector: '#wrap2',
+			//imagesPath: 'images/background.jpg'
+		});
+		$('#box3').backgroundScroll({
+			//defaults:
+			//wrapBoxSelector: '#wrap3',
+			//imagesPath: 'images/background.jpg'
+		});
+
+
+
+		$('#wrap').backgroundScroll({
+			//defaults:
+			//wrapBoxSelector: 'body',
+			//imagesPath: 'images/background.jpg'
+		});
+
+
+	})
+	</script>
+	<div id="wrap">
+		<div id="wrap1">
+			<div id="box1"><img src="images/box_content.png"></div>
+		</div>
+		<div id="wrap2">
+			<div id="box2"><img src="images/box_content.png"></div>
+		</div>
+		<div id="wrap3">
+			<div id="box3"><img src="images/box_content.png"></div>
+		</div>
+		<div><img src="images/box_content.png"></div>
+	</div>
 </body>
+
 </html>
